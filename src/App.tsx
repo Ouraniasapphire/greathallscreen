@@ -1,10 +1,6 @@
 import { createSignal, onMount, onCleanup } from "solid-js";
 import styles from "./App.module.css";
 
-interface Album {
-  urls: string[];
-}
-
 function App() {
   const [time, setTime] = createSignal(new Date());
   const [images, setImages] = createSignal<string[]>([]);
@@ -50,14 +46,14 @@ function App() {
     return h * 60 + m;
   };
 
-  // Update clock every second
-  const interval = setInterval(() => setTime(new Date()), 1000);
-  onCleanup(() => clearInterval(interval));
+  // Tick clock every second
+  const clockInterval = setInterval(() => setTime(new Date()), 1000);
+  onCleanup(() => clearInterval(clockInterval));
 
-  // Fetch album images
+  // Fetch images from Vercel serverless function
   async function fetchImages() {
     try {
-      const res = await fetch("/album.json");
+      const res = await fetch("/api/album"); // use serverless function
       const data: string[] = await res.json();
       setImages(data);
     } catch (err) {
@@ -65,15 +61,15 @@ function App() {
     }
   }
 
-  // Rotate slideshow every 5 seconds
+  // Rotate slideshow and refetch album
   onMount(() => {
     fetchImages();
 
     const slideInterval = setInterval(() => {
       setCurrentIndex((i) => (i + 1) % (images().length || 1));
-    }, 60000); // 1 minute = 60,000 ms
+    }, 5000); // change slide every 5s
 
-    const refreshInterval = setInterval(fetchImages, 5 * 60 * 1000);
+    const refreshInterval = setInterval(fetchImages, 5 * 60 * 1000); // refresh every 5 min
 
     return () => {
       clearInterval(slideInterval);
@@ -81,29 +77,27 @@ function App() {
     };
   });
 
-  // Update current class hour
-  onMount(() => {
-    const classInterval = setInterval(() => {
-      const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      let current = "Passing time";
-      for (const period of schedule) {
-        if (
-          currentMinutes >= timeToMinutes(period.start) &&
-          currentMinutes <= timeToMinutes(period.end)
-        ) {
-          current = period.label;
-          break;
-        }
+  // Update current class hour every minute
+  const classInterval = setInterval(() => {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    let current = "Passing time";
+    for (const period of schedule) {
+      if (
+        currentMinutes >= timeToMinutes(period.start) &&
+        currentMinutes <= timeToMinutes(period.end)
+      ) {
+        current = period.label;
+        break;
       }
-      setCurrentClass(current);
-    }, 1000);
+    }
+    setCurrentClass(current);
+  }, 1000);
+  onCleanup(() => clearInterval(classInterval));
 
-    onCleanup(() => clearInterval(classInterval));
-  });
-
+  // Use Vercel proxy endpoint
   const proxiedUrl = (url: string) =>
-    `http://localhost:4000/api/proxy-image?url=${encodeURIComponent(url)}`;
+    `/api/proxy?url=${encodeURIComponent(url)}`;
 
   return (
     <div class={styles.app}>
@@ -113,7 +107,7 @@ function App() {
             {time().toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
-              hour12: false, // 24-hour format
+              hour12: false,
             })}
           </div>
           <div class={styles.side}>
