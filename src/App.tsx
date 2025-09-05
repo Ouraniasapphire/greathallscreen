@@ -67,7 +67,7 @@ function App() {
 
     const slideInterval = setInterval(() => {
       setCurrentIndex((i) => (i + 1) % (images().length || 1));
-    }, 5000); // change slide every 5s
+    }, 60000); // change slide every 5s
 
     const refreshInterval = setInterval(fetchImages, 5 * 60 * 1000); // refresh every 5 min
 
