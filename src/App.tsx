@@ -32,6 +32,7 @@ function App() {
   ];
 
   const schedule = [
+    { start: "00:00", end: "08:14", label: "Good morning!" },
     { start: "08:15", end: "09:06", label: "1st Hour" },
     { start: "09:09", end: "10:00", label: "2nd Hour" },
     { start: "10:03", end: "10:54", label: "3rd Hour" },
@@ -39,6 +40,7 @@ function App() {
     { start: "12:16", end: "13:07", label: "5th Hour" },
     { start: "13:10", end: "14:01", label: "6th Hour" },
     { start: "14:04", end: "14:57", label: "7th Hour" },
+    { start: "14:58", end: "23:59", label: "Have a great night!" },
   ];
 
   const timeToMinutes = (t: string) => {
