@@ -106,11 +106,13 @@ function App() {
       <div class={styles.clockContainer}>
         <div class={styles.clock}>
           <div class={styles.time}>
-            {time().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            })}
+            {time()
+              .toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
+              .replace(/\s?[AP]M/, "")}
           </div>
           <div class={styles.side}>
             <div>{time().getHours() >= 12 ? "PM" : "AM"}</div>
