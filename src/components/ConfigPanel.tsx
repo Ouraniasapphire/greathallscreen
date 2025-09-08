@@ -1,5 +1,6 @@
+// src/components/ConfigPanel.tsx
 import { createSignal } from "solid-js";
-import { UserConfig, DEFAULTS } from "./config";
+import { UserConfig, DEFAULTS } from "../config";
 import styles from "../App.module.css";
 
 interface ConfigPanelProps {
@@ -8,7 +9,6 @@ interface ConfigPanelProps {
 }
 
 export function ConfigPanel(props: ConfigPanelProps) {
-  // Local signals for inputs (temporary changes)
   const [textColor, setTextColor] = createSignal(props.currentConfig.textColor);
   const [fontFamily, setFontFamily] = createSignal(
     props.currentConfig.fontFamily
@@ -16,12 +16,14 @@ export function ConfigPanel(props: ConfigPanelProps) {
   const [backgroundColor, setBackgroundColor] = createSignal(
     props.currentConfig.backgroundColor
   );
+  const [albumUrl, setAlbumUrl] = createSignal(props.currentConfig.albumUrl); // NEW
 
   const applyChanges = () => {
     props.updateConfig({
       textColor: textColor(),
       fontFamily: fontFamily(),
       backgroundColor: backgroundColor(),
+      albumUrl: albumUrl(), // save user’s album url
     });
   };
 
@@ -29,6 +31,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
     setTextColor(DEFAULTS.textColor);
     setFontFamily(DEFAULTS.fontFamily);
     setBackgroundColor(DEFAULTS.backgroundColor);
+    setAlbumUrl(DEFAULTS.albumUrl); // reset to env
     props.updateConfig(DEFAULTS);
   };
 
@@ -36,7 +39,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
     <div
       class={styles.app}
       style={{
-        background: props.currentConfig.backgroundColor, // use applied config
+        background: props.currentConfig.backgroundColor,
         color: props.currentConfig.textColor,
         "font-family": props.currentConfig.fontFamily,
         "min-height": "100vh",
@@ -75,10 +78,18 @@ export function ConfigPanel(props: ConfigPanelProps) {
           />
         </div>
 
+        <div>
+          <label>Album URL:</label>
+          <input
+            type="text"
+            value={albumUrl()}
+            placeholder="Paste Google album URL"
+            onInput={(e) => setAlbumUrl(e.currentTarget.value)}
+          />
+        </div>
+
         <div style={{ display: "flex", gap: "1rem", "margin-top": "1rem" }}>
           <button onClick={applyChanges}>Apply</button>
-
-          {/* Revert Button with Tooltip */}
           <div class={styles.tooltipContainer}>
             <button onClick={revertDefaults} class={styles.revertButton}>
               Revert

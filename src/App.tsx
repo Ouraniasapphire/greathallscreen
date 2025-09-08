@@ -1,6 +1,8 @@
 import { createSignal, onMount } from "solid-js";
 import styles from "./App.module.css";
 import { useConfig } from "./useConfig";
+import { loadConfig, saveConfig, DEFAULTS } from "./config"; // ✅
+
 
 function App() {
   // ---------- Config ----------
@@ -20,7 +22,8 @@ function App() {
 
   const fetchImages = async () => {
     try {
-      const res = await fetch("/api/album");
+      const url = config().albumUrl || DEFAULTS.albumUrl; // user cookie or env
+      const res = await fetch(`/api/album?url=${encodeURIComponent(url)}`);
       const data: string[] = await res.json();
       setImages(data);
     } catch (err) {

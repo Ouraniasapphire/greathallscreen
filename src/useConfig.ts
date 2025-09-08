@@ -1,6 +1,6 @@
 // src/useConfig.ts
 import { createSignal } from "solid-js";
-import { loadConfig, saveConfig, UserConfig } from "./components/config";
+import { loadConfig, saveConfig, UserConfig } from "./config";
 
 // Create a global reactive config store
 const [config, setConfig] = createSignal<UserConfig>(loadConfig());
