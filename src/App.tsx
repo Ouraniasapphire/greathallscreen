@@ -1,4 +1,4 @@
-import { createSignal, onMount, onCleanup } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import styles from "./App.module.css";
 import { useConfig } from "./useConfig";
 
@@ -16,6 +16,7 @@ function App() {
   // ---------- Slideshow ----------
   const [images, setImages] = createSignal<string[]>([]);
   const [currentIndex, setCurrentIndex] = createSignal(0);
+  const [showSlideshow, setShowSlideshow] = createSignal(true);
 
   const fetchImages = async () => {
     try {
@@ -119,9 +120,27 @@ function App() {
         "font-family": config().fontFamily,
         "min-height": "100vh",
         padding: "1rem",
+        position: "relative",
       }}
     >
-      {/* ---------- Config Panel ---------- */}
+      {/* ---------- Toggle Button ---------- */}
+      <button
+        onClick={() => setShowSlideshow(!showSlideshow())}
+        style={{
+          position: "absolute",
+          top: "1rem",
+          right: "1rem",
+          padding: "0.5rem 1rem",
+          "border-radius": "0.5rem",
+          border: "none",
+          cursor: "pointer",
+          "background-color": config().textColor,
+          color: config().backgroundColor,
+          "font-weight": "bold",
+        }}
+      >
+        {showSlideshow() ? "Hide" : "Show"}
+      </button>
 
       {/* ---------- Clock ---------- */}
       <div class={styles.clockContainer} style={{ color: config().textColor }}>
@@ -150,18 +169,20 @@ function App() {
       </div>
 
       {/* ---------- Slideshow ---------- */}
-      <div class={styles.slideshow}>
-        {images().length > 0 ? (
-          <img
-            src={proxiedUrl(images()[currentIndex()])}
-            class={styles.slideImage}
-          />
-        ) : (
-          <p class={styles.loading} style={{ color: config().textColor }}>
-            Loading slideshow...
-          </p>
-        )}
-      </div>
+      {showSlideshow() && (
+        <div class={styles.slideshow}>
+          {images().length > 0 ? (
+            <img
+              src={proxiedUrl(images()[currentIndex()])}
+              class={styles.slideImage}
+            />
+          ) : (
+            <p class={styles.loading} style={{ color: config().textColor }}>
+              Loading slideshow...
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
