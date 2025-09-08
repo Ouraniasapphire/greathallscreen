@@ -3,7 +3,9 @@ export interface UserConfig {
   textColor: string;
   fontFamily: string;
   backgroundColor: string;
-  albumUrl: string; // NEW
+  albumUrl: string;
+  slideshowSpeed: number;
+  musicUrl: string; // ✅ NEW
 }
 
 export const DEFAULTS: UserConfig = {
@@ -11,6 +13,8 @@ export const DEFAULTS: UserConfig = {
   fontFamily: "Poppins, sans-serif",
   backgroundColor: "#1a1a1a",
   albumUrl: import.meta.env.VITE_ALBUM_URL || "",
+  slideshowSpeed: 60,
+  musicUrl: "", // ✅ default no music
 };
 
 export function setCookie(name: string, value: string, days = 30) {
@@ -36,7 +40,10 @@ export function loadConfig(): UserConfig {
     albumUrl:
       cookieAlbumUrl && cookieAlbumUrl.trim() !== ""
         ? cookieAlbumUrl
-        : DEFAULTS.albumUrl, // fallback to env default if empty
+        : DEFAULTS.albumUrl,
+    slideshowSpeed:
+      Number(getCookie("slideshowSpeed")) || DEFAULTS.slideshowSpeed,
+    musicUrl: getCookie("musicUrl") || DEFAULTS.musicUrl, // ✅
   };
 }
 
@@ -48,10 +55,21 @@ export function saveConfig(config: Partial<UserConfig>) {
 
   if (config.albumUrl !== undefined) {
     if (config.albumUrl.trim() === "") {
-      // clear cookie by expiring it
       setCookie("albumUrl", "", -1);
     } else {
       setCookie("albumUrl", config.albumUrl);
+    }
+  }
+
+  if (config.slideshowSpeed !== undefined) {
+    setCookie("slideshowSpeed", config.slideshowSpeed.toString());
+  }
+
+  if (config.musicUrl !== undefined) {
+    if (config.musicUrl.trim() === "") {
+      setCookie("musicUrl", "", -1); // clear
+    } else {
+      setCookie("musicUrl", config.musicUrl); // ✅
     }
   }
 }

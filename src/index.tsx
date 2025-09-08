@@ -3,7 +3,7 @@ import { Router, Route } from "@solidjs/router";
 
 import "./index.css";
 import App from "./App";
-import Config from "./Config";
+import Config from "./ConfigComp";
 
 const root = document.getElementById("root");
 

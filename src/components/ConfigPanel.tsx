@@ -16,14 +16,20 @@ export function ConfigPanel(props: ConfigPanelProps) {
   const [backgroundColor, setBackgroundColor] = createSignal(
     props.currentConfig.backgroundColor
   );
-  const [albumUrl, setAlbumUrl] = createSignal(props.currentConfig.albumUrl); // NEW
+  const [albumUrl, setAlbumUrl] = createSignal(props.currentConfig.albumUrl);
+  const [slideshowSpeed, setSlideshowSpeed] = createSignal(
+    props.currentConfig.slideshowSpeed
+  );
+  const [musicUrl, setMusicUrl] = createSignal(props.currentConfig.musicUrl); // ✅
 
   const applyChanges = () => {
     props.updateConfig({
       textColor: textColor(),
       fontFamily: fontFamily(),
       backgroundColor: backgroundColor(),
-      albumUrl: albumUrl(), // save user’s album url
+      albumUrl: albumUrl(),
+      slideshowSpeed: slideshowSpeed(),
+      musicUrl: musicUrl(), // ✅ save
     });
   };
 
@@ -31,7 +37,9 @@ export function ConfigPanel(props: ConfigPanelProps) {
     setTextColor(DEFAULTS.textColor);
     setFontFamily(DEFAULTS.fontFamily);
     setBackgroundColor(DEFAULTS.backgroundColor);
-    setAlbumUrl(DEFAULTS.albumUrl); // reset to env
+    setAlbumUrl(DEFAULTS.albumUrl);
+    setSlideshowSpeed(DEFAULTS.slideshowSpeed);
+    setMusicUrl(DEFAULTS.musicUrl);
     props.updateConfig(DEFAULTS);
   };
 
@@ -41,16 +49,10 @@ export function ConfigPanel(props: ConfigPanelProps) {
       style={{
         background: props.currentConfig.backgroundColor,
         color: props.currentConfig.textColor,
-        "font-family": props.currentConfig.fontFamily,
-        "min-height": "100vh",
-        display: "flex",
-        "justify-content": "center",
-        "align-items": "center",
       }}
     >
       <div class={styles.config}>
         <h3>Settings</h3>
-
         <div>
           <label>Text Color:</label>
           <input
@@ -59,7 +61,6 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setTextColor(e.currentTarget.value)}
           />
         </div>
-
         <div>
           <label>Font:</label>
           <input
@@ -68,7 +69,6 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setFontFamily(e.currentTarget.value)}
           />
         </div>
-
         <div>
           <label>Background Color:</label>
           <input
@@ -77,7 +77,6 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setBackgroundColor(e.currentTarget.value)}
           />
         </div>
-
         <div>
           <label>Album URL:</label>
           <input
@@ -87,7 +86,24 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setAlbumUrl(e.currentTarget.value)}
           />
         </div>
-
+        <div>
+          <label>Slideshow Speed (seconds):</label>
+          <input
+            type="number"
+            min="5"
+            value={slideshowSpeed()}
+            onInput={(e) => setSlideshowSpeed(Number(e.currentTarget.value))}
+          />
+        </div>
+        <div>
+          <label>Ambient Music URL:</label>
+          <input
+            type="text"
+            value={musicUrl()}
+            placeholder="Paste MP3 or stream URL"
+            onInput={(e) => setMusicUrl(e.currentTarget.value)}
+          />
+        </div>
         <div style={{ display: "flex", gap: "1rem", "margin-top": "1rem" }}>
           <button onClick={applyChanges}>Apply</button>
           <div class={styles.tooltipContainer}>

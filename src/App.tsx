@@ -1,10 +1,11 @@
 import { createSignal, onMount } from "solid-js";
 import styles from "./App.module.css";
 import { useConfig } from "./useConfig";
-import { loadConfig, saveConfig, DEFAULTS } from "./config"; // ✅
-
+import { loadConfig, saveConfig, DEFAULTS } from "./config";
 
 function App() {
+  const [musicStarted, setMusicStarted] = createSignal(false);
+
   // ---------- Config ----------
   const { config } = useConfig();
 
@@ -36,7 +37,7 @@ function App() {
 
     const slideInterval = setInterval(() => {
       setCurrentIndex((i) => (i + 1) % (images().length || 1));
-    }, 60000); // change slide every 60s
+    }, (config().slideshowSpeed || DEFAULTS.slideshowSpeed) * 1000);
 
     const refreshInterval = setInterval(fetchImages, 5 * 60 * 1000);
 
@@ -186,6 +187,55 @@ function App() {
           )}
         </div>
       )}
+
+      {/* ---------- Ambient Music ---------- */}
+      <div>
+        {/* Play button */}
+        {config().musicUrl && (
+          <button
+            onClick={() => setMusicStarted(!musicStarted())} // toggle signal
+            style={{
+              position: "absolute",
+              top: "1rem",
+              left: "1rem",
+              padding: "0.5rem 1rem",
+              "border-radius": "0.5rem",
+              border: "none",
+              cursor: "pointer",
+              "background-color": config().textColor,
+              color: config().backgroundColor,
+              "font-weight": "bold",
+            }}
+          >
+            {musicStarted() ? "Stop" : "Play"}
+          </button>
+        )}
+
+        {/* Hidden iframe once user clicks */}
+        {musicStarted() &&
+          config().musicUrl &&
+          (() => {
+            try {
+              const url = new URL(config().musicUrl);
+              const videoId = url.searchParams.get("v");
+              if (!videoId) return null;
+
+              const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
+
+              return (
+                <iframe
+                  width="0"
+                  height="0"
+                  src={embedUrl}
+                  frameborder="0"
+                  allow="autoplay"
+                ></iframe>
+              );
+            } catch {
+              return null;
+            }
+          })()}
+      </div>
     </div>
   );
 }

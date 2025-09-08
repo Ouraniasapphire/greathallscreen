@@ -85,6 +85,9 @@
   margin: 2rem auto;
   color: #fff;
   transition: all 0.3s ease;
+
+  max-height: 75vh;
+  overflow-y: auto;
 }
 
 .config h3 {
