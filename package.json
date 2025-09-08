@@ -19,6 +19,7 @@
     "vite-plugin-solid": "^2.11.6"
   },
   "dependencies": {
+    "@solidjs/router": "^0.15.3",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "google-photos-album-image-url-fetch": "^3.2.0",
