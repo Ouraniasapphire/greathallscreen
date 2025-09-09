@@ -1,13 +1,13 @@
 .app {
   margin: 0;
-  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-weight: bold;
 
-  flex: 1;
 }
 
 .clockContainer {
@@ -68,8 +68,7 @@
 }
 
 .slideImage {
-  max-height: 90%;
-  max-width: 90%;
+  height: 90%;
   border-radius: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   object-fit: contain;
