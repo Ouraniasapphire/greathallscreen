@@ -2,6 +2,7 @@ import { createSignal, onMount } from "solid-js";
 import styles from "./App.module.css";
 import { useConfig } from "./useConfig";
 import { loadConfig, saveConfig, DEFAULTS } from "./config";
+import SlideMenu from "./components/Menu";
 
 function App() {
   const [musicStarted, setMusicStarted] = createSignal(false);
@@ -127,25 +128,6 @@ function App() {
         position: "relative",
       }}
     >
-      {/* ---------- Toggle Button ---------- */}
-      <button
-        onClick={() => setShowSlideshow(!showSlideshow())}
-        style={{
-          position: "absolute",
-          top: "1rem",
-          right: "1rem",
-          padding: "0.5rem 1rem",
-          "border-radius": "0.5rem",
-          border: "none",
-          cursor: "pointer",
-          "background-color": config().textColor,
-          color: config().backgroundColor,
-          "font-weight": "bold",
-        }}
-      >
-        {showSlideshow() ? "Hide" : "Show"}
-      </button>
-
       {/* ---------- Clock ---------- */}
       <div class={styles.clockContainer} style={{ color: config().textColor }}>
         <div class={styles.clock}>
@@ -172,6 +154,92 @@ function App() {
         <div class={styles.classHour}>{currentClass()}</div>
       </div>
 
+      <SlideMenu>
+        <ul style={{ "list-style": "none", padding: 0, margin: 0 }}>
+          {/* Play button */}
+          <li>
+            {config().musicUrl && (
+              <button
+                onClick={() => setMusicStarted(!musicStarted())} // toggle signal
+                style={{
+                  width: "100%",
+                  padding: "0.5rem 1rem",
+                  "border-radius": "0.5rem",
+                  border: "none",
+                  cursor: "pointer",
+                  "background-color": config().textColor,
+                  color: config().backgroundColor,
+                  "font-weight": "bold",
+                  "margin-bottom": "0.5rem",
+                  "line-height": 1,
+                }}
+              >
+                {musicStarted() ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill={config().backgroundColor}
+                  >
+                    <path d="M320-640v320-320Zm-80 400v-480h480v480H240Zm80-80h320v-320H320v320Z" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill={config().backgroundColor}
+                  >
+                    <path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z" />
+                  </svg>
+                )}
+              </button>
+            )}
+          </li>
+          <li>
+            <button
+              onClick={() => setShowSlideshow(!showSlideshow())}
+              style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                "border-radius": "0.5rem",
+                border: "none",
+                cursor: "pointer",
+                "background-color": config().textColor,
+                color: config().backgroundColor,
+                "font-weight": "bold",
+                "margin-bottom": "0.5rem",
+                "line-height": 1,
+              }}
+            >
+              {showSlideshow() ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill={config().backgroundColor}
+                >
+                  <path d="m840-234-80-80v-446H314l-80-80h526q33 0 56.5 23.5T840-760v526ZM792-56l-64-64H200q-33 0-56.5-23.5T120-200v-528l-64-64 56-56 736 736-56 56ZM240-280l120-160 90 120 33-44-283-283v447h447l-80-80H240Zm297-257ZM424-424Z" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill={config().backgroundColor}
+                >
+                  <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
+                </svg>
+              )}
+            </button>
+          </li>
+        </ul>
+      </SlideMenu>
+
       {/* ---------- Slideshow ---------- */}
       {showSlideshow() && (
         <div class={styles.slideshow}>
@@ -188,54 +256,30 @@ function App() {
         </div>
       )}
 
-      {/* ---------- Ambient Music ---------- */}
-      <div>
-        {/* Play button */}
-        {config().musicUrl && (
-          <button
-            onClick={() => setMusicStarted(!musicStarted())} // toggle signal
-            style={{
-              position: "absolute",
-              top: "1rem",
-              left: "1rem",
-              padding: "0.5rem 1rem",
-              "border-radius": "0.5rem",
-              border: "none",
-              cursor: "pointer",
-              "background-color": config().textColor,
-              color: config().backgroundColor,
-              "font-weight": "bold",
-            }}
-          >
-            {musicStarted() ? "Stop" : "Play"}
-          </button>
-        )}
+      {/* Hidden iframe once user clicks */}
+      {musicStarted() &&
+        config().musicUrl &&
+        (() => {
+          try {
+            const url = new URL(config().musicUrl);
+            const videoId = url.searchParams.get("v");
+            if (!videoId) return null;
 
-        {/* Hidden iframe once user clicks */}
-        {musicStarted() &&
-          config().musicUrl &&
-          (() => {
-            try {
-              const url = new URL(config().musicUrl);
-              const videoId = url.searchParams.get("v");
-              if (!videoId) return null;
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
 
-              const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
-
-              return (
-                <iframe
-                  width="0"
-                  height="0"
-                  src={embedUrl}
-                  frameborder="0"
-                  allow="autoplay"
-                ></iframe>
-              );
-            } catch {
-              return null;
-            }
-          })()}
-      </div>
+            return (
+              <iframe
+                width="0"
+                height="0"
+                src={embedUrl}
+                frameborder="0"
+                allow="autoplay"
+              ></iframe>
+            );
+          } catch {
+            return null;
+          }
+        })()}
     </div>
   );
 }
