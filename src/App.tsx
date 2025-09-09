@@ -154,12 +154,14 @@ function App() {
               <div>{time().getSeconds().toString().padStart(2, "0")}</div>
             </div>
           </div>
-          <div class={styles.date}>
-            {`${weekdays[time().getDay()]} - ${
-              months[time().getMonth()]
-            } ${time().getDate().toString().padStart(2, "0")}`}
+          <div class={styles.dateclass}>
+            <div class={styles.date}>
+              {`${weekdays[time().getDay()]} - ${
+                months[time().getMonth()]
+              } ${time().getDate().toString().padStart(2, "0")}`}
+            </div>
+            <div class={styles.classHour}>{currentClass()}</div>
           </div>
-          <div class={styles.classHour}>{currentClass()}</div>
         </div>
       )}
 
