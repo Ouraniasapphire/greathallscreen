@@ -17,6 +17,8 @@ function App() {
     return () => clearInterval(clockInterval);
   });
 
+  const [showClock, setShowClock] = createSignal(true);
+
   // ---------- Slideshow ----------
   const [images, setImages] = createSignal<string[]>([]);
   const [currentIndex, setCurrentIndex] = createSignal(0);
@@ -47,6 +49,10 @@ function App() {
       clearInterval(refreshInterval);
     };
   });
+
+  const [isClient, setIsClient] = createSignal(false);
+
+  onMount(() => setIsClient(true));
 
   const proxiedUrl = (url: string) =>
     `/api/proxy?url=${encodeURIComponent(url)}`;
@@ -128,31 +134,34 @@ function App() {
         position: "relative",
       }}
     >
-      {/* ---------- Clock ---------- */}
-      <div class={styles.clockContainer} style={{ color: config().textColor }}>
-        <div class={styles.clock}>
-          <div class={styles.time}>
-            {time()
-              .toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })
-              .replace(/\s?[AP]M/, "")}
+      {showClock() && (
+        <div
+          class={styles.clockContainer}
+          style={{ color: config().textColor }}
+        >
+          <div class={styles.clock}>
+            <div class={styles.time}>
+              {time()
+                .toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })
+                .replace(/\s?[AP]M/, "")}
+            </div>
+            <div class={styles.side}>
+              <div>{time().getHours() >= 12 ? "PM" : "AM"}</div>
+              <div>{time().getSeconds().toString().padStart(2, "0")}</div>
+            </div>
           </div>
-          <div class={styles.side}>
-            <div>{time().getHours() >= 12 ? "PM" : "AM"}</div>
-            <div>{time().getSeconds().toString().padStart(2, "0")}</div>
+          <div class={styles.date}>
+            {`${weekdays[time().getDay()]} - ${
+              months[time().getMonth()]
+            } ${time().getDate().toString().padStart(2, "0")}`}
           </div>
+          <div class={styles.classHour}>{currentClass()}</div>
         </div>
-        <div class={styles.date}>
-          {`${weekdays[time().getDay()]} - ${months[time().getMonth()]} ${time()
-            .getDate()
-            .toString()
-            .padStart(2, "0")}`}
-        </div>
-        <div class={styles.classHour}>{currentClass()}</div>
-      </div>
+      )}
 
       <SlideMenu>
         <ul style={{ "list-style": "none", padding: 0, margin: 0 }}>
@@ -237,6 +246,45 @@ function App() {
               )}
             </button>
           </li>
+          <li>
+            <button
+              onClick={() => setShowClock(!showClock())}
+              style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                "border-radius": "0.5rem",
+                border: "none",
+                cursor: "pointer",
+                "background-color": config().textColor,
+                color: config().backgroundColor,
+                "font-weight": "bold",
+                "margin-bottom": "0.5rem",
+                "line-height": 1,
+              }}
+            >
+              {showClock() ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill={config().backgroundColor}
+                >
+                  <path d="m798-274-60-60q11-27 16.5-53.5T760-440q0-116-82-198t-198-82q-24 0-51 5t-56 16l-60-60q38-20 80.5-30.5T480-800q60 0 117.5 20T706-722l56-56 56 56-56 56q38 51 58 108.5T840-440q0 42-10.5 83.5T798-274ZM520-552v-88h-80v8l80 80ZM792-56l-96-96q-48 35-103.5 53.5T480-80q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-60 18.5-115.5T192-656L56-792l56-56 736 736-56 56ZM480-160q42 0 82-13t75-37L248-599q-24 35-36 75t-12 84q0 116 82 198t198 82ZM360-840v-80h240v80H360Zm83 435Zm113-112Z" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill={config().backgroundColor}
+                >
+                  <path d="M480-80q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-440q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-800q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-440q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-80Zm0-360Zm112 168 56-56-128-128v-184h-80v216l152 152ZM224-866l56 56-170 170-56-56 170-170Zm512 0 170 170-56 56-170-170 56-56ZM480-160q117 0 198.5-81.5T760-440q0-117-81.5-198.5T480-720q-117 0-198.5 81.5T200-440q0 117 81.5 198.5T480-160Z" />
+                </svg>
+              )}
+            </button>
+          </li>
         </ul>
       </SlideMenu>
 
@@ -256,7 +304,6 @@ function App() {
         </div>
       )}
 
-      {/* Hidden iframe once user clicks */}
       {musicStarted() &&
         config().musicUrl &&
         (() => {
