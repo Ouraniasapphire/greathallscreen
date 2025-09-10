@@ -106,12 +106,43 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setMusicUrl(e.currentTarget.value)}
           />
         </div>
-        <div style={{ display: "flex", gap: "1rem", "margin-top": "1rem", "flex-direction": "column", "width": "100%", "align-items": "center" }}>
-          <button onClick={applyChanges}>Apply</button>
-            <button onClick={revertDefaults}>
-              Revert
-            </button>
-          <button onClick={() => navigate('/')}>Back</button>
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            "margin-top": "1rem",
+            "flex-direction": "column",
+            width: "100%",
+            "align-items": "center",
+          }}
+        >
+          <button
+            onClick={applyChanges}
+            style={{
+              "background-color": textColor(),
+              color: backgroundColor(),
+            }}
+          >
+            Apply
+          </button>
+          <button
+            onClick={revertDefaults}
+            style={{
+              "background-color": textColor(),
+              color: backgroundColor(),
+            }}
+          >
+            Revert
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            style={{
+              "background-color": textColor(),
+              color: backgroundColor(),
+            }}
+          >
+            Back
+          </button>
         </div>
       </div>
     </div>
