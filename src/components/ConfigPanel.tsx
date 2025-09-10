@@ -1,5 +1,4 @@
-// src/components/ConfigPanel.tsx
-import { createSignal } from "solid-js";
+import { createSignal, onMount, For } from "solid-js";
 import { UserConfig, DEFAULTS } from "../config";
 import styles from "../App.module.css";
 import { useNavigate } from "@solidjs/router";
@@ -22,7 +21,37 @@ export function ConfigPanel(props: ConfigPanelProps) {
   const [slideshowSpeed, setSlideshowSpeed] = createSignal(
     props.currentConfig.slideshowSpeed
   );
-  const [musicUrl, setMusicUrl] = createSignal(props.currentConfig.musicUrl); // ✅
+  const [musicUrl, setMusicUrl] = createSignal(props.currentConfig.musicUrl);
+
+  const [availableFonts, setAvailableFonts] = createSignal<string[]>([]);
+
+  onMount(async () => {
+    try {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "/fonts.css";
+      document.head.appendChild(link);
+
+      const res = await fetch("/fonts.json");
+      const fonts: string[] = await res.json();
+
+      const fontNames = fonts.map((f) => f.replace(/\.[^/.]+$/, ""));
+      setAvailableFonts(fontNames);
+
+      if (
+        !props.currentConfig.fontFamily ||
+        !fontNames.includes(props.currentConfig.fontFamily)
+      ) {
+        // ✅ default to Poppins-Regular if available
+        const fallback = fontNames.includes("Poppins-Regular")
+          ? "Poppins-Regular"
+          : DEFAULTS.fontFamily;
+        setFontFamily(fallback);
+      }
+    } catch (err) {
+      console.error("Could not load fonts.json", err);
+    }
+  });
 
   const applyChanges = () => {
     props.updateConfig({
@@ -31,7 +60,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
       backgroundColor: backgroundColor(),
       albumUrl: albumUrl(),
       slideshowSpeed: slideshowSpeed(),
-      musicUrl: musicUrl(), // ✅ save
+      musicUrl: musicUrl(),
     });
   };
 
@@ -51,34 +80,42 @@ export function ConfigPanel(props: ConfigPanelProps) {
       style={{
         background: props.currentConfig.backgroundColor,
         color: props.currentConfig.textColor,
+        "font-family": props.currentConfig.fontFamily, // ✅ preview in chosen font
       }}
     >
       <div class={`${styles.config} ${styles.inner}`}>
         <h3>Settings</h3>
+
         <div>
           <label>Text Color:</label>
           <input
-            type="color"
+            type="text"
             value={textColor()}
             onInput={(e) => setTextColor(e.currentTarget.value)}
           />
         </div>
+
         <div>
           <label>Font:</label>
-          <input
-            type="text"
+          <select
             value={fontFamily()}
             onInput={(e) => setFontFamily(e.currentTarget.value)}
-          />
+          >
+            <For each={availableFonts()}>
+              {(font) => <option value={font}>{font}</option>}
+            </For>
+          </select>
         </div>
+
         <div>
           <label>Background Color:</label>
           <input
-            type="color"
+            type="text"
             value={backgroundColor()}
             onInput={(e) => setBackgroundColor(e.currentTarget.value)}
           />
         </div>
+
         <div>
           <label>Album URL:</label>
           <input
@@ -88,6 +125,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setAlbumUrl(e.currentTarget.value)}
           />
         </div>
+
         <div>
           <label>Slideshow Speed (seconds):</label>
           <input
@@ -97,6 +135,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setSlideshowSpeed(Number(e.currentTarget.value))}
           />
         </div>
+
         <div>
           <label>Ambient Music URL:</label>
           <input
@@ -106,6 +145,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setMusicUrl(e.currentTarget.value)}
           />
         </div>
+
         <div
           style={{
             display: "flex",
