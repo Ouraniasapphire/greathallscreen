@@ -24,13 +24,15 @@
 }
 
 .solo .slideImage {
-  width: 90%;
+  width: 75%;
+  max-height: 90%;
 }
 
 /* ---------- Definite styling ---------- */
 .app {
   margin: 0;
   height: 100dvh;
+  max-height: 100vh;
   display: flex;
 
   font-weight: bold;
@@ -89,6 +91,7 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  max-height: 90%;
 }
 
 .slideImage {
