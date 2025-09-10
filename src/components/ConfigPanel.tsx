@@ -53,7 +53,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
         color: props.currentConfig.textColor,
       }}
     >
-      <div class={styles.config}>
+      <div class={`${styles.config} ${styles.inner}`}>
         <h3>Settings</h3>
         <div>
           <label>Text Color:</label>
@@ -106,14 +106,11 @@ export function ConfigPanel(props: ConfigPanelProps) {
             onInput={(e) => setMusicUrl(e.currentTarget.value)}
           />
         </div>
-        <div style={{ display: "flex", gap: "1rem", "margin-top": "1rem" }}>
+        <div style={{ display: "flex", gap: "1rem", "margin-top": "1rem", "flex-direction": "column", "width": "100%", "align-items": "center" }}>
           <button onClick={applyChanges}>Apply</button>
-          <div class={styles.tooltipContainer}>
-            <button onClick={revertDefaults} class={styles.revertButton}>
+            <button onClick={revertDefaults}>
               Revert
             </button>
-            <span class={styles.tooltipText}>Revert back to defaults</span>
-          </div>
           <button onClick={() => navigate('/')}>Back</button>
         </div>
       </div>

@@ -371,7 +371,6 @@ function App() {
                 width="0"
                 height="0"
                 src={embedUrl}
-                frameborder="0"
                 allow="autoplay"
               ></iframe>
             );
