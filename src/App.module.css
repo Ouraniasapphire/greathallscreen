@@ -1,31 +1,54 @@
+/* ---------- Relative styling ---------- */
+.solo,
+.group {
+  flex-direction: column;
+}
+
+.group .clockContainer {
+  flex-direction: row;
+}
+
+.solo .clockContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+}
+
+.solo .clock {
+  gap: 10px;
+}
+
+.solo .date {
+  margin-top: 20px;
+}
+
+.solo .slideImage {
+  width: 90%;
+}
+
+/* ---------- Definite styling ---------- */
 .app {
   margin: 0;
   height: 100dvh;
-  max-height: 100vh;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
 
+  font-weight: bold;
+  display: flex;
 }
 
 .clockContainer {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 4rem;
-
-  height: fit-content;
-
   flex: 0 0 auto;
+  margin-top: 2rem;
 }
 
 .clock {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
 }
 
 .time {
@@ -47,7 +70,6 @@
 }
 
 .date {
-  margin-top: 20px;
   font-size: 2rem;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -59,25 +81,31 @@
   text-align: center;
 }
 
+/* ---------- Slideshow ---------- */
 .slideshow {
-  flex: 1;
+  flex: 1 1 auto; /* take remaining space */
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .slideImage {
-  height: 90%;
+  max-height: 90%;
+  max-width: 75%;
   border-radius: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   object-fit: contain;
 }
 
+/* ---------- Loading Text ---------- */
 .loading {
   font-size: 3rem;
+  text-align: center;
 }
 
+/* ---------- Config Panel ---------- */
 .config {
   display: flex;
   flex-direction: column;
@@ -94,7 +122,6 @@
   margin: 2rem auto;
   color: #fff;
   transition: all 0.3s ease;
-
   max-height: 75vh;
   overflow-y: auto;
 }
@@ -168,12 +195,12 @@
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* ---------- Tooltip ---------- */
 .tooltipContainer {
   position: relative;
   display: inline-block;
 }
 
-/* Tooltip text */
 .tooltipText {
   visibility: hidden;
   width: 160px;
@@ -184,7 +211,7 @@
   padding: 0.5rem;
   position: absolute;
   z-index: 1;
-  bottom: 125%; /* position above the button */
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
@@ -192,13 +219,12 @@
   font-size: 0.85rem;
 }
 
-/* Show tooltip on hover */
 .tooltipContainer:hover .tooltipText {
   visibility: visible;
   opacity: 1;
 }
 
-/* Revert button styling */
+/* ---------- Revert Button ---------- */
 .revertButton {
   padding: 0.75rem 2rem;
   background: linear-gradient(135deg, #f5576c, #f093fb);

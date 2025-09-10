@@ -2,6 +2,7 @@
 import { createSignal } from "solid-js";
 import { UserConfig, DEFAULTS } from "../config";
 import styles from "../App.module.css";
+import { useNavigate } from "@solidjs/router";
 
 interface ConfigPanelProps {
   currentConfig: UserConfig;
@@ -9,6 +10,7 @@ interface ConfigPanelProps {
 }
 
 export function ConfigPanel(props: ConfigPanelProps) {
+  const navigate = useNavigate();
   const [textColor, setTextColor] = createSignal(props.currentConfig.textColor);
   const [fontFamily, setFontFamily] = createSignal(
     props.currentConfig.fontFamily
@@ -112,6 +114,7 @@ export function ConfigPanel(props: ConfigPanelProps) {
             </button>
             <span class={styles.tooltipText}>Revert back to defaults</span>
           </div>
+          <button onClick={() => navigate('/')}>Back</button>
         </div>
       </div>
     </div>
