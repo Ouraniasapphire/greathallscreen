@@ -18,6 +18,7 @@ render(
     <Router>
       <Route path="/" component={App} />
       <Route path="/config" component={Config} />
+      <Route path="/startup" component={Config} />
     </Router>
   ),
   root!

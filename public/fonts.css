@@ -39,6 +39,14 @@
 
 
 @font-face {
+  font-family: "FontdinerSwanky-Regular";
+  src: url("/fonts/FontdinerSwanky-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
   font-family: "Karla-Bold";
   src: url("/fonts/Karla-Bold.ttf") format("truetype");
   font-weight: normal;
@@ -721,6 +729,46 @@
 @font-face {
   font-family: "Roboto_SemiCondensed-ThinItalic";
   src: url("/fonts/Roboto_SemiCondensed-ThinItalic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: "TsukimiRounded-Bold";
+  src: url("/fonts/TsukimiRounded-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: "TsukimiRounded-Light";
+  src: url("/fonts/TsukimiRounded-Light.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: "TsukimiRounded-Medium";
+  src: url("/fonts/TsukimiRounded-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: "TsukimiRounded-Regular";
+  src: url("/fonts/TsukimiRounded-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: "TsukimiRounded-SemiBold";
+  src: url("/fonts/TsukimiRounded-SemiBold.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

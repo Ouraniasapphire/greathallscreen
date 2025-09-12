@@ -1,4 +1,38 @@
-/* ---------- Relative styling ---------- */
+@media (min-width: 1025px) {
+  .group .slideImage {
+    width: 640px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .group .slideImage {
+    width: 480px;
+  }
+}
+
+@media (max-width: 768px) {
+  .group .slideImage {
+    width: 320px;
+  }
+
+  .group .date {
+    font-size: 1rem;
+  }
+
+  .group .classHour {
+    font-size: 1rem;
+  }
+
+  .group .time {
+    font-size: 5rem;
+  }
+
+  .group .side {
+    font-size: 1.5rem;
+  }
+}
+
+/* --- Relative styling --- */
 .solo,
 .group {
   flex-direction: column;
@@ -8,11 +42,20 @@
   flex-direction: row;
 }
 
+.group .card {
+  width: fit-content;
+}
+
+.group .slideshow {
+  aspect-ratio: 16 / 9;
+}
+
 .solo .clockContainer {
   height: 100%;
   display: flex;
   flex-direction: column;
   margin-top: 0;
+  gap: 1rem;
 }
 
 .solo .clock {
@@ -24,21 +67,59 @@
 }
 
 .solo .slideImage {
-  width: 75%;
-  max-height: 90%;
+  width: 1024px;
 }
 
-
-
-/* ---------- Definite styling ---------- */
+/* --- Definite styling --- */
 .app {
+  box-sizing: border-box;
   margin: 0;
   height: 100dvh;
-  max-height: 100vh;
+  max-height: 100dvh;
   display: flex;
-
+  gap: 1rem;
   font-weight: bold;
+  /* Consider flex-wrap: wrap here if you want items to stack on smaller screens */
+}
+
+/* --- Slideshow --- */
+.slideshowContainer {
+  flex: 1 1 auto;
   display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+}
+
+.slideshow {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.slideImage {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  object-fit: contain;
+  display: block;
+}
+
+.card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
 }
 
 .clockContainer {
@@ -85,37 +166,13 @@
   text-align: center;
 }
 
-/* ---------- Slideshow ---------- */
-.slideshow {
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 1rem; /* optional padding to prevent edges touching */
-}
-
-.slideImage {
-  width: auto;           /* let width adjust naturally */
-  height: auto;          /* let height adjust naturally */
-  max-width: 90%;        /* scale down for very wide images */
-  max-height: 90%;       /* scale down for very tall images */
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  object-fit: contain;   /* maintain aspect ratio without clipping */
-  display: block;
-}
-
-
-/* ---------- Loading Text ---------- */
+/* --- Loading Text --- */
 .loading {
   font-size: 3rem;
   text-align: center;
 }
 
-/* ---------- Config Panel ---------- */
+/* --- Config Panel --- */
 .config {
   width: 90%;
   padding: 2rem;
@@ -176,7 +233,7 @@
   box-shadow: 0 0 10px rgba(179, 229, 252, 0.5);
 }
 
-.config button {
+.config button, .wow button {
   margin-top: 1rem;
   padding: 0.75rem 2rem;
   font-weight: bold;
@@ -197,4 +254,25 @@
 .config button:active {
   transform: translateY(0px);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.wow {
+  display: flex;
+  flex: 1 1 auto;
+
+  flex-direction: column;
+  width: 100%;
+  height: 100;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 4rem;
+}
+
+.wow .inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

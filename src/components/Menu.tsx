@@ -1,16 +1,7 @@
 import { createSignal, JSX } from "solid-js";
 import { useConfig } from "../useConfig";
 
-export default function SlideMenu(props: {
-  children:
-    | number
-    | boolean
-    | Node
-    | JSX.ArrayElement
-    | (string & {})
-    | null
-    | undefined;
-}) {
+export default function SlideMenu(props: { children: any }) {
   const [open, setOpen] = createSignal(false);
   const { config } = useConfig();
 

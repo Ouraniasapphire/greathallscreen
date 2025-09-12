@@ -12,9 +12,9 @@ export const DEFAULTS: UserConfig = {
   textColor: "#b3e5fc",
   fontFamily: "Poppins, sans-serif",
   backgroundColor: "#1a1a1a",
-  albumUrl: import.meta.env.VITE_ALBUM_URL || "",
+  albumUrl: "",
   slideshowSpeed: 60,
-  musicUrl: "", // ✅ default no music
+  musicUrl: "",
 };
 
 export function setCookie(name: string, value: string, days = 30) {
