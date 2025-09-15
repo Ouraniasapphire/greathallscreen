@@ -1,18 +1,18 @@
 @media (min-width: 1025px) {
   .group .slideImage {
-    width: 640px;
+    max-width: 640px;
   }
 }
 
 @media (max-width: 1024px) {
   .group .slideImage {
-    width: 480px;
+    max-width: 480px;
   }
 }
 
 @media (max-width: 768px) {
   .group .slideImage {
-    width: 320px;
+    max-width: 320px;
   }
 
   .group .date {
